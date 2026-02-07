@@ -7,7 +7,37 @@ export type Message = {
   content: string;
 };
 
+// IMPORTANT: Leave VITE_API_URL empty in your .env file to use the Vite development proxy.
+// The proxy is configured in vite.config.ts and will forward /api requests to http://localhost:8080.
+// If you set VITE_API_URL to http://localhost:8080, you will likely encounter CORS errors
+// unless you explicitly enable CORS in your Spring Boot backend.
 const CHAT_URL = `${import.meta.env.VITE_API_URL || ''}/api/v1/chat/ask`;
+
+/**
+ * SPRING BOOT CORS CONFIGURATION REFERENCE:
+ *
+ * If you prefer to connect directly to 8080 (bypassing the proxy),
+ * add this annotation to your Controller in Spring Boot:
+ *
+ * @CrossOrigin(origins = "http://localhost:3000")
+ * @RestController
+ * @RequestMapping("/api/v1/chat")
+ * public class ChatController { ... }
+ *
+ * Or configure it globally:
+ *
+ * @Configuration
+ * public class WebConfig implements WebMvcConfigurer {
+ *     @Override
+ *     public void addCorsMappings(CorsRegistry registry) {
+ *         registry.addMapping("/api/**")
+ *                .allowedOrigins("http://localhost:3000")
+ *                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+ *                .allowedHeaders("*")
+ *                .allowCredentials(true);
+ *     }
+ * }
+ */
 
 export function useChatStream() {
   const [messages, setMessages] = useState<Message[]>([]);
