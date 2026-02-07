@@ -94,11 +94,11 @@ export function ChatInput({ onSend, isLoading, placeholder = 'Hỏi về lịch 
             size="icon"
             className="
               relative flex-shrink-0 h-10 w-10 rounded-xl
-              bg-gradient-to-br from-primary via-primary to-accent
+              bg-gradient-to-br from-secondary via-[hsl(45_55%_60%)] to-secondary
               hover:opacity-90 
               disabled:opacity-40
               transition-all duration-200
-              shadow-lg shadow-primary/25
+              shadow-lg shadow-secondary/30
               overflow-hidden
             "
           >
