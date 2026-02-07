@@ -16,8 +16,8 @@ serve(async (req) => {
     const lastUserMessage = messages[messages.length - 1].content;
 
     // KẾT NỐI TRỰC TIẾP ĐẾN SPRING BOOT
-    // Lưu ý: Nếu deploy lên Supabase Cloud, thay localhost bằng URL Ngrok của bạn
-    const SPRING_BOOT_URL = "http://localhost:8080/api/chat"; 
+    // Lưu ý: Đã cập nhật URL production
+    const SPRING_BOOT_URL = "https://behistorymindai-production.up.railway.app/api/chat";
 
     console.log("Forwarding request to Spring Boot:", lastUserMessage);
 
