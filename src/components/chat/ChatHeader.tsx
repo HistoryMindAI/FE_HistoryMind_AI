@@ -23,8 +23,8 @@ export function ChatHeader({ onReset, showReset = false }: ChatHeaderProps) {
             whileHover={{ scale: 1.03 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md shadow-primary/20">
-              <span className="font-display text-lg font-bold text-primary-foreground">S</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary via-[hsl(45_55%_60%)] to-secondary flex items-center justify-center shadow-md shadow-secondary/30">
+              <span className="font-display text-lg font-bold text-secondary-foreground drop-shadow-sm">S</span>
             </div>
           </motion.div>
           
