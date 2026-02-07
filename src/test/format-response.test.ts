@@ -93,28 +93,36 @@ describe('formatHistoryResponse', () => {
       expect(result).not.toContain('Câu hỏi nhắm tới');
     });
 
-    it('should fallback to answer if no events match filter', () => {
-      const input = {
-        "answer": "This is the generated answer.",
+    it('should parse JSON strings correctly', () => {
+      const input = JSON.stringify({
         "events": [
-          { "story": "B1. some meta data", "year": 1911 }
+          { "year": 1911, "story": "Nguyễn Tất Thành ra đi tìm đường cứu nước." }
         ]
-      };
+      });
       const result = formatHistoryResponse(input);
-      expect(result).toBe("This is the generated answer.");
+      expect(result).toContain('### Năm 1911');
+      expect(result).toContain('Nguyễn Tất Thành');
     });
 
-    it('should handle multiple distinct events in the same year', () => {
+    it('should handle edge cases like null fields and missing years', () => {
       const input = {
         "events": [
-          { "story": "Năm 1930, Khởi nghĩa Yên Bái bùng nổ.", "year": 1930 },
-          { "story": "Năm 1930, Thành lập Đảng Cộng sản Việt Nam.", "year": 1930 }
+          { "year": 1225, "event": null, "story": undefined },
+          { "year": 1226, "event": "Clean event" },
+          { "event": "No year event" }
         ]
       };
       const result = formatHistoryResponse(input);
-      expect(result).toContain('### Năm 1930');
-      expect(result).toContain('- Khởi nghĩa Yên Bái bùng nổ.');
-      expect(result).toContain('- Thành lập Đảng Cộng sản Việt Nam.');
+      expect(result).toContain('### Năm 1226');
+      expect(result).toContain('- Clean event');
+      expect(result).toContain('### Sự kiện khác');
+      expect(result).toContain('- No year event');
+    });
+
+    it('should handle no_data correctly', () => {
+      const input = { no_data: true };
+      const result = formatHistoryResponse(input);
+      expect(result).toBe("Xin lỗi, tôi không tìm thấy thông tin lịch sử phù hợp với yêu cầu của bạn.");
     });
 
     it('should deduplicate very similar events in the same year', () => {
@@ -128,6 +136,19 @@ describe('formatHistoryResponse', () => {
       const lines = result.split('\n');
       const bulletPoints = lines.filter(l => l.startsWith('- '));
       expect(bulletPoints.length).toBe(1);
+    });
+
+    it('should handle the documents format', () => {
+      const data = {
+        "documents": [
+          { "year": 1225, "event": "Nhà Trần thành lập (1225).", "story": "Nhà Trần thành lập (1225)." },
+          { "year": 1225, "event": "B1. gắn mốc 1225...", "story": "B1. gắn mốc 1225..." }
+        ]
+      };
+      const result = formatHistoryResponse(data);
+      expect(result).toContain('### Năm 1225');
+      expect(result).toContain('Nhà Trần thành lập');
+      expect(result).not.toContain('B1.');
     });
   });
 });
