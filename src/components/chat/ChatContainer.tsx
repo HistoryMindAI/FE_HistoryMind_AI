@@ -6,6 +6,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { WelcomeScreen } from './WelcomeScreen';
 import { HeritageBackground } from '../decorative/HeritageBackground';
+import { MainLayout } from '../layout/MainLayout';
 import { toast } from 'sonner';
 
 export function ChatContainer() {
@@ -27,9 +28,10 @@ export function ChatContainer() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-100 via-amber-50/40 to-stone-100 flex flex-col">
-      {/* Main content area - centered */}
-      <main className="flex-1 flex items-start justify-center px-4 py-5 md:px-6 md:py-6">
+    <MainLayout onNewChat={clearMessages}>
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Main content area - centered */}
+        <main className="flex-1 flex items-start justify-center px-4 py-5 md:px-6 md:py-6">
         {/* Central chat container with elegant card design */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -42,7 +44,7 @@ export function ChatContainer() {
           
           {/* Main card */}
           <div 
-            className="relative bg-background/98 rounded-2xl shadow-xl shadow-stone-900/5 border border-border/40 overflow-hidden flex flex-col"
+            className="relative bg-card/98 rounded-2xl shadow-xl shadow-foreground/5 border border-border/40 overflow-hidden flex flex-col"
             style={{ minHeight: 'calc(100vh - 80px)', maxHeight: 'calc(100vh - 80px)' }}
           >
             {/* Header inside the card */}
@@ -89,8 +91,9 @@ export function ChatContainer() {
               </div>
             </div>
           </div>
-        </motion.div>
-      </main>
-    </div>
+          </motion.div>
+        </main>
+      </div>
+    </MainLayout>
   );
 }
