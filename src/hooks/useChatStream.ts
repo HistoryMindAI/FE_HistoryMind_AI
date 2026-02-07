@@ -149,17 +149,20 @@ export function useChatStream() {
               const content = parsed.choices?.[0]?.delta?.content as string | undefined;
               if (content) {
                 assistantContent += content;
-                setMessages(prev =>
-                  prev.map(m =>
-                    m.id === assistantId
-                      ? { ...m, content: assistantContent }
-                      : m
-                  )
-                );
               }
             } catch { /* ignore */ }
           }
         }
+
+        // Format the final accumulated content if needed
+        const finalContent = formatHistoryResponse(assistantContent);
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === assistantId
+              ? { ...m, content: finalContent }
+              : m
+          )
+        );
       }
     } catch (e) {
       console.error('Chat error:', e);
