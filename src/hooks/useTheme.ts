@@ -15,10 +15,27 @@ const defaultSettings: Settings = {
   language: 'vi',
 };
 
+/* =========================
+   FAVICON HANDLER
+========================= */
+function setFavicon(theme: Theme) {
+  const link = document.getElementById('favicon') as HTMLLinkElement | null;
+  if (!link) return;
+
+  // Safari cache rất gắt → bust cache
+  link.href =
+    theme === 'dark'
+      ? `./src/assets/trong_dong_2.png?v=${Date.now()}`
+      : `./src/assets/trong-dong.png?v=${Date.now()}`;
+}
+
+/* =========================
+   HOOK
+========================= */
 export function useTheme() {
   const [settings, setSettings] = useState<Settings>(() => {
     if (typeof window === 'undefined') return defaultSettings;
-    
+
     const saved = localStorage.getItem(SETTINGS_KEY);
     if (saved) {
       try {
@@ -30,21 +47,32 @@ export function useTheme() {
     return defaultSettings;
   });
 
-  // Apply theme on mount and when it changes
+  /* =========================
+     APPLY THEME + FAVICON
+  ========================= */
   useEffect(() => {
     const root = document.documentElement;
+
     if (settings.theme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
+
+    // 🔥 đổi favicon đồng bộ theme
+    setFavicon(settings.theme);
   }, [settings.theme]);
 
-  // Persist settings to localStorage
+  /* =========================
+     PERSIST SETTINGS
+  ========================= */
   useEffect(() => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   }, [settings]);
 
+  /* =========================
+     ACTIONS
+  ========================= */
   const setTheme = (theme: Theme) => {
     setSettings(prev => ({ ...prev, theme }));
   };
@@ -61,19 +89,25 @@ export function useTheme() {
   };
 }
 
-// Initialize theme immediately to prevent flash
+/* =========================
+   INIT THEME (NO FLASH)
+========================= */
 export function initializeTheme() {
   if (typeof window === 'undefined') return;
-  
+
   const saved = localStorage.getItem(SETTINGS_KEY);
   if (saved) {
     try {
-      const settings = JSON.parse(saved);
+      const settings: Settings = JSON.parse(saved);
+
       if (settings.theme === 'dark') {
         document.documentElement.classList.add('dark');
       }
+
+      // 🔥 set favicon ngay từ đầu
+      setFavicon(settings.theme);
     } catch {
-      // Ignore parse errors
+      // ignore
     }
   }
 }
