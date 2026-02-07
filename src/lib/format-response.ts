@@ -20,6 +20,43 @@ export interface HistoryResponse {
   [year: string]: YearData;
 }
 
+/**
+ * Removes technical prefixes and instructional phrases often found in backend responses.
+ */
+function cleanTechnicalText(text: string): string {
+  if (!text) return '';
+
+  return text
+    // Remove "Năm [year], " at the start
+    .replace(/^Năm \d+,\s*/gi, '')
+    // Remove technical markers globally (B1., B2., B3.) and their common labels
+    .replace(/B\d\.\s*(gắn mốc \d+ với |nêu diễn biến trọng tâm – |kết luận – )?/gi, '')
+    // Remove internal reasoning/meta phrases
+    .replace(/Câu hỏi nhắm tới sự kiện\s*/gi, '')
+    .replace(/Bối cảnh\.\s*/gi, '')
+    .replace(/Cốt lõi\.\s*/gi, '')
+    .replace(/Trả lời sẽ nêu rõ mốc, diễn biến chính và\.\s*/gi, '')
+    .replace(/Sẽ tóm lược rõ ràng\.\s*/gi, '')
+    // Remove trailing dots that might be left over from mid-sentence cleaning
+    .replace(/\.\s+\./g, '.')
+    // Collapse whitespace
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Normalizes content for similarity checking to prevent duplicates of different formats.
+ */
+function getNormalizedKey(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/\(\d+\)/g, '') // remove years in parens
+    .replace(/diễn ra năm \d+/g, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, '') // remove punctuation
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function formatHistoryResponse(data: unknown): string {
   if (!data) return '';
 
@@ -53,49 +90,36 @@ export function formatHistoryResponse(data: unknown): string {
 
       const rawEvents = Array.isArray(obj.events) ? obj.events : (Array.isArray(obj.documents) ? obj.documents : []);
 
-      // Filter out redundant/meta events
-      const filteredEvents = rawEvents.filter((ev: any) => {
-        if (!ev) return false;
-        let content = (ev.story || ev.event || '').trim();
-        if (!content) return false;
+      const processedEvents: { year: string, content: string, key: string }[] = [];
+      const seenKeys = new Set<string>();
 
-        // Normalize by removing common prefixes before checking
-        const normalized = content.replace(/^Năm \d+,\s*/i, '').trim();
+      rawEvents.forEach((ev: any) => {
+        if (!ev) return;
+        const year = ev.year !== undefined && ev.year !== null ? String(ev.year) : 'Khác';
+        let rawContent = (ev.story || ev.event || '').trim();
+        if (!rawContent) return;
 
-        return !normalized.startsWith('B1.') &&
-               !normalized.startsWith('B2.') &&
-               !normalized.startsWith('B3.') &&
-               !normalized.startsWith('Câu hỏi nhắm tới') &&
-               !normalized.startsWith('Bối cảnh.') &&
-               !normalized.startsWith('Cốt lõi.');
+        const cleanedContent = cleanTechnicalText(rawContent);
+        if (!cleanedContent || cleanedContent.length < 5) return; // Skip if empty after cleaning
+
+        const normalizedKey = getNormalizedKey(cleanedContent);
+
+        // Use a combination of year and normalized prefix for deduplication
+        // This helps if the same event is reported with slightly different wording
+        const dedupeKey = `${year}_${normalizedKey.slice(0, 50)}`;
+
+        if (!seenKeys.has(dedupeKey)) {
+          seenKeys.add(dedupeKey);
+          processedEvents.push({ year, content: cleanedContent, key: normalizedKey });
+        }
       });
 
-      if (filteredEvents.length > 0) {
-        // Group by year and deduplicate by content similarity
-        const groups: Record<string, any[]> = {};
-        const seenContent = new Set<string>();
-
-        filteredEvents.forEach((ev: any) => {
-          const year = ev.year !== undefined && ev.year !== null ? String(ev.year) : 'Khác';
-          const rawContent = (ev.story || ev.event || '').trim();
-
-          // Normalized content for similarity check: remove years, punctuation and common prefixes
-          const normalized = rawContent
-            .replace(/^Năm \d+,\s*/i, '')
-            .replace(/\(\d+\)/g, '')
-            .replace(/diễn ra năm \d+/g, '')
-            .replace(/[^\p{L}\p{N}\s]/gu, '') // Remove all punctuation (Unicode aware)
-            .replace(/\s+/g, ' ')
-            .trim();
-
-          // Use first 30 characters for similarity grouping within the same year
-          const similarityKey = `${year}_${normalized.slice(0, 30)}`;
-
-          if (!seenContent.has(similarityKey)) {
-            seenContent.add(similarityKey);
-            if (!groups[year]) groups[year] = [];
-            groups[year].push(ev);
-          }
+      if (processedEvents.length > 0) {
+        // Group by year
+        const groups: Record<string, string[]> = {};
+        processedEvents.forEach(ev => {
+          if (!groups[ev.year]) groups[ev.year] = [];
+          groups[ev.year].push(ev.content);
         });
 
         let markdown = '';
@@ -112,15 +136,7 @@ export function formatHistoryResponse(data: unknown): string {
             markdown += `### Sự kiện khác\n\n`;
           }
 
-          groups[year].forEach((ev: any) => {
-            let content = (ev.story || ev.event || '').trim();
-            if (!content) return;
-
-            // Remove "Năm [year], " prefix if it exists to avoid redundancy with the header
-            if (year !== 'Khác') {
-              content = content.replace(new RegExp(`^Năm ${year},\\s*`, 'i'), '');
-            }
-
+          groups[year].forEach((content) => {
             markdown += `- ${content}\n`;
           });
           markdown += '\n';
@@ -128,9 +144,10 @@ export function formatHistoryResponse(data: unknown): string {
         return markdown.trim();
       }
 
-      // If no events but has an answer, return the answer
+      // If no valid events but has an answer, return the cleaned answer
       if (typeof obj.answer === 'string' && obj.answer.trim()) {
-        return obj.answer.trim();
+        const cleanedAnswer = cleanTechnicalText(obj.answer);
+        return cleanedAnswer || obj.answer.trim();
       }
 
       // Fallback for new format with no data
