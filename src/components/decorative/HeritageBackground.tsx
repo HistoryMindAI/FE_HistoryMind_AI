@@ -11,7 +11,7 @@ export function HeritageBackground() {
         <motion.img
           src={trongDong}
           alt="Trống đồng Đông Sơn"
-          className="w-[380px] h-[380px] md:w-[480px] md:h-[480px] object-contain"
+          className="w-[380px] h-[380px] md:w-[480px] md:h-[480px] object-contain [filter:drop-shadow(0_0_20px_rgba(180,140,60,0.3))] dark:opacity-[0.45] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_50px_rgba(255,200,50,0.8))_drop-shadow(0_0_80px_rgba(255,180,50,0.5))]"
           style={{ opacity: 0.18 }}
           animate={{ 
             rotate: 360 
@@ -26,7 +26,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-15%', top: '10%' }}
         animate={{ 
           x: ['0vw', '130vw'],
@@ -46,7 +46,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-15%', top: '42%' }}
         animate={{ 
           x: ['0vw', '-130vw'],
@@ -67,7 +67,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-12%', top: '70%' }}
         animate={{ 
           x: ['0vw', '125vw'],
@@ -88,7 +88,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-12%', top: '18%' }}
         animate={{ 
           x: ['0vw', '-125vw'],
@@ -109,7 +109,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-14%', top: '32%' }}
         animate={{ 
           x: ['0vw', '128vw'],
@@ -130,7 +130,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-12%', top: '60%' }}
         animate={{ 
           x: ['0vw', '-125vw'],
@@ -151,7 +151,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-10%', top: '5%' }}
         animate={{ 
           x: ['0vw', '120vw'],
@@ -172,7 +172,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-10%', top: '80%' }}
         animate={{ 
           x: ['0vw', '-120vw'],
@@ -193,7 +193,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-14%', top: '52%' }}
         animate={{ 
           x: ['0vw', '128vw'],
@@ -214,7 +214,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-14%', top: '28%' }}
         animate={{ 
           x: ['0vw', '-128vw'],
@@ -235,7 +235,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacRight}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ left: '-12%', top: '88%' }}
         animate={{ 
           x: ['0vw', '124vw'],
@@ -256,7 +256,7 @@ export function HeritageBackground() {
       <motion.img
         src={chimHacLeft}
         alt="Chim hạc"
-        className="absolute w-24 h-auto md:w-28"
+        className="absolute w-24 h-auto md:w-28 [filter:drop-shadow(0_0_8px_rgba(180,140,60,0.4))] dark:[filter:brightness(2.5)_sepia(1)_saturate(4)_hue-rotate(0deg)_drop-shadow(0_0_15px_rgba(255,200,50,0.9))_drop-shadow(0_0_30px_rgba(255,180,50,0.6))]"
         style={{ right: '-10%', top: '2%' }}
         animate={{ 
           x: ['0vw', '-122vw'],
