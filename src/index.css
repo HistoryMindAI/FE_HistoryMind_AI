@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Vietnamese Heritage - Warm Earth Tones */
-    --background: 30 25% 97%;
+    --background: 35 30% 96%;
     --foreground: 25 30% 12%;
 
     --card: 32 22% 95%;
@@ -72,56 +72,70 @@
   }
 
   .dark {
-    --background: 25 20% 8%;
-    --foreground: 30 20% 92%;
+    /* Deep warm charcoal background */
+    --background: 20 15% 7%;
+    --foreground: 35 20% 90%;
 
-    --card: 25 18% 12%;
-    --card-foreground: 30 20% 92%;
+    /* Card with subtle warmth */
+    --card: 22 14% 11%;
+    --card-foreground: 35 20% 90%;
 
-    --popover: 25 18% 12%;
-    --popover-foreground: 30 20% 92%;
+    --popover: 22 14% 11%;
+    --popover-foreground: 35 20% 90%;
 
-    --primary: 15 40% 50%;
-    --primary-foreground: 25 20% 8%;
+    /* Terracotta adjusted for dark - warmer and more vibrant */
+    --primary: 15 50% 55%;
+    --primary-foreground: 20 15% 7%;
 
-    --secondary: 35 35% 45%;
-    --secondary-foreground: 25 20% 8%;
+    /* Gold - rich and warm */
+    --secondary: 38 55% 55%;
+    --secondary-foreground: 20 15% 7%;
 
-    --muted: 25 12% 18%;
-    --muted-foreground: 30 12% 60%;
+    /* Muted surfaces */
+    --muted: 22 12% 15%;
+    --muted-foreground: 30 15% 55%;
 
-    --accent: 18 30% 40%;
-    --accent-foreground: 30 20% 92%;
+    /* Accent - warm mahogany glow */
+    --accent: 15 40% 45%;
+    --accent-foreground: 35 20% 92%;
 
-    --destructive: 0 55% 40%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 25 12% 20%;
-    --input: 25 12% 20%;
-    --ring: 15 40% 50%;
+    /* Borders with warm undertone */
+    --border: 25 10% 18%;
+    --input: 25 12% 16%;
+    --ring: 15 50% 55%;
 
-    --terracotta: 15 40% 50%;
-    --terracotta-light: 15 35% 55%;
-    --gold: 38 45% 50%;
-    --gold-muted: 35 30% 45%;
-    --paper: 25 20% 8%;
-    --paper-warm: 25 18% 12%;
-    --ink: 30 20% 92%;
-    --ink-light: 30 12% 70%;
+    /* Custom theme tokens for dark */
+    --terracotta: 15 50% 55%;
+    --terracotta-light: 15 45% 62%;
+    --gold: 38 55% 55%;
+    --gold-muted: 35 40% 48%;
+    --paper: 20 15% 7%;
+    --paper-warm: 22 14% 11%;
+    --ink: 35 20% 90%;
+    --ink-light: 30 15% 65%;
 
-    --glow-primary: 0 0 25px hsl(15 40% 50% / 0.4);
-    --glow-gold: 0 0 35px hsl(38 45% 50% / 0.3);
+    /* Enhanced glows for dark mode */
+    --glow-primary: 0 0 30px hsl(15 50% 55% / 0.35);
+    --glow-gold: 0 0 40px hsl(38 55% 55% / 0.25);
 
-    --gradient-glass: linear-gradient(135deg, hsl(25 18% 12% / 0.8) 0%, hsl(25 15% 15% / 0.6) 100%);
+    /* Glass effect for dark */
+    --gradient-warm: linear-gradient(135deg, hsl(15 50% 55%) 0%, hsl(15 40% 45%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 55% 55%) 0%, hsl(35 50% 50%) 100%);
+    --gradient-paper: linear-gradient(180deg, hsl(20 15% 7%) 0%, hsl(22 14% 11%) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(22 14% 11% / 0.85) 0%, hsl(22 12% 14% / 0.7) 100%);
 
-    --sidebar-background: 20 20% 10%;
-    --sidebar-foreground: 35 25% 92%;
-    --sidebar-primary: 5 55% 45%;
-    --sidebar-primary-foreground: 20 25% 8%;
-    --sidebar-accent: 20 15% 18%;
-    --sidebar-accent-foreground: 35 25% 92%;
-    --sidebar-border: 20 15% 20%;
-    --sidebar-ring: 5 55% 45%;
+    /* Sidebar */
+    --sidebar-background: 20 14% 9%;
+    --sidebar-foreground: 35 20% 90%;
+    --sidebar-primary: 15 50% 55%;
+    --sidebar-primary-foreground: 20 15% 7%;
+    --sidebar-accent: 22 12% 15%;
+    --sidebar-accent-foreground: 35 20% 90%;
+    --sidebar-border: 25 10% 18%;
+    --sidebar-ring: 15 50% 55%;
   }
 }
 
