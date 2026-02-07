@@ -45,6 +45,22 @@ export function useChatStream() {
   const [error, setError] = useState<string | null>(null);
 
   const sendMessage = useCallback(async (input: string) => {
+    // Identity Check (Client-side optimization)
+    if (input.match(/(who are you|bạn là ai|giới thiệu|what is your name|tên bạn là gì)/i)) {
+      const userMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: input,
+      };
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: "Xin chào, tôi là History Mind AI. Tôi ở đây để giúp bạn tìm hiểu về lịch sử Việt Nam và thế giới. Bạn có câu hỏi nào không?",
+      };
+      setMessages(prev => [...prev, userMessage, assistantMessage]);
+      return;
+    }
+
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
@@ -59,6 +75,31 @@ export function useChatStream() {
     const assistantId = crypto.randomUUID();
 
     try {
+      // Prepare payload with system instructions
+      const messagesPayload = [...messages, userMessage].map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
+
+      // Inject system instruction into the last message to guide the backend LLM
+      if (messagesPayload.length > 0) {
+        const isRangeQuery = /(?:từ|năm)\s+(\d{3,4})\s+(?:đến|tới|-)\s+(?:năm\s+)?(\d{3,4})/i.test(input) || /(?:from)\s+(\d{3,4})\s+(?:to|-)\s+(\d{3,4})/i.test(input);
+
+        let systemInstruction = `\n\n[SYSTEM INSTRUCTION: You are History Mind AI.
+If the user asks who you are, introduce yourself as History Mind AI.
+If the user asks for events between two years (e.g., 1945-2000), you MUST list events for EVERY year in that range, not just the start year.
+If you cannot find information for the specific question asked, return {"no_data": true}.
+Do NOT repeat the previous answer if it is not relevant to the new question.`;
+
+        if (isRangeQuery) {
+          systemInstruction += " The user is asking for a range. Retrieve and list events for ALL years in this range.";
+        }
+
+        systemInstruction += "]";
+
+        messagesPayload[messagesPayload.length - 1].content += systemInstruction;
+      }
+
       const response = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
@@ -67,10 +108,7 @@ export function useChatStream() {
         },
         body: JSON.stringify({
           question: input,
-          messages: [...messages, userMessage].map(m => ({
-            role: m.role,
-            content: m.content,
-          })),
+          messages: messagesPayload,
         }),
       });
 
