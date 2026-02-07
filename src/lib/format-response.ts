@@ -22,18 +22,43 @@ export interface HistoryResponse {
 
 export function formatHistoryResponse(data: unknown): string {
   if (!data) return '';
-  if (typeof data === 'string') return data;
+
+  let obj: any = data;
+
+  // If data is a string, try to parse it as JSON first
+  if (typeof data === 'string') {
+    const trimmed = data.trim();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        obj = JSON.parse(trimmed);
+      } catch (e) {
+        // Not valid JSON, keep it as a string
+        return data;
+      }
+    } else {
+      return data;
+    }
+  }
 
   try {
-    const obj = data as any;
-
     // Handle new backend format: { answer: string, events: Array, intent: string, ... }
-    if (obj && typeof obj === 'object' && (Array.isArray(obj.events) || typeof obj.answer === 'string')) {
-      const events = Array.isArray(obj.events) ? obj.events : [];
+    // or Search result format: { documents: Array, ... }
+    const isNewFormat = obj && typeof obj === 'object' && (Array.isArray(obj.events) || typeof obj.answer === 'string' || obj.no_data === true);
+    const isSearchFormat = obj && typeof obj === 'object' && Array.isArray(obj.documents);
+
+    if (isNewFormat || isSearchFormat) {
+      if (obj.no_data === true) {
+        return "Xin lỗi, tôi không tìm thấy thông tin lịch sử phù hợp với yêu cầu của bạn.";
+      }
+
+      const rawEvents = Array.isArray(obj.events) ? obj.events : (Array.isArray(obj.documents) ? obj.documents : []);
 
       // Filter out redundant/meta events
-      const filteredEvents = events.filter((ev: any) => {
+      const filteredEvents = rawEvents.filter((ev: any) => {
+        if (!ev) return false;
         let content = (ev.story || ev.event || '').trim();
+        if (!content) return false;
+
         // Normalize by removing common prefixes before checking
         const normalized = content.replace(/^Năm \d+,\s*/i, '').trim();
 
@@ -47,12 +72,13 @@ export function formatHistoryResponse(data: unknown): string {
 
       if (filteredEvents.length > 0) {
         // Group by year and deduplicate by content similarity
-        const groups: Record<number, any[]> = {};
+        const groups: Record<string, any[]> = {};
         const seenContent = new Set<string>();
 
         filteredEvents.forEach((ev: any) => {
-          const year = ev.year;
+          const year = ev.year !== undefined && ev.year !== null ? String(ev.year) : 'Khác';
           const rawContent = (ev.story || ev.event || '').trim();
+
           // Normalized content for similarity check: remove years, punctuation and common prefixes
           const normalized = rawContent
             .replace(/^Năm \d+,\s*/i, '')
@@ -73,14 +99,28 @@ export function formatHistoryResponse(data: unknown): string {
         });
 
         let markdown = '';
-        const sortedYears = Object.keys(groups).map(Number).sort((a, b) => a - b);
+        const sortedYears = Object.keys(groups).sort((a, b) => {
+          if (a === 'Khác') return 1;
+          if (b === 'Khác') return -1;
+          return Number(a) - Number(b);
+        });
 
         for (const year of sortedYears) {
-          markdown += `### Năm ${year}\n\n`;
+          if (year !== 'Khác') {
+            markdown += `### Năm ${year}\n\n`;
+          } else {
+            markdown += `### Sự kiện khác\n\n`;
+          }
+
           groups[year].forEach((ev: any) => {
-            let content = ev.story || ev.event;
+            let content = (ev.story || ev.event || '').trim();
+            if (!content) return;
+
             // Remove "Năm [year], " prefix if it exists to avoid redundancy with the header
-            content = content.replace(new RegExp(`^Năm ${year},\\s*`, 'i'), '');
+            if (year !== 'Khác') {
+              content = content.replace(new RegExp(`^Năm ${year},\\s*`, 'i'), '');
+            }
+
             markdown += `- ${content}\n`;
           });
           markdown += '\n';
@@ -92,10 +132,13 @@ export function formatHistoryResponse(data: unknown): string {
       if (typeof obj.answer === 'string' && obj.answer.trim()) {
         return obj.answer.trim();
       }
+
+      // Fallback for new format with no data
+      return "Xin lỗi, tôi không tìm thấy thông tin phù hợp.";
     }
 
     // Existing logic for old format: { "year": { summary: "...", events: [...] } }
-    const historyData = data as HistoryResponse;
+    const historyData = obj as HistoryResponse;
     let markdown = '';
     let hasYearData = false;
 
@@ -130,9 +173,9 @@ export function formatHistoryResponse(data: unknown): string {
     }
 
     // Fallback for other object types
-    return JSON.stringify(data, null, 2);
+    return typeof obj === 'object' ? JSON.stringify(obj, null, 2) : String(obj);
   } catch (error) {
     console.error('Error formatting history response:', error);
-    return typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+    return typeof obj === 'object' ? JSON.stringify(obj, null, 2) : String(obj);
   }
 }
