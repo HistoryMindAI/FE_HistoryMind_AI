@@ -7,10 +7,9 @@ export type Message = {
   content: string;
 };
 
-// IMPORTANT: Leave VITE_API_URL empty in your .env file to use the Vite development proxy.
-// The proxy is configured in vite.config.ts and will forward /api requests to http://localhost:8080.
-// If you set VITE_API_URL to http://localhost:8080, you will likely encounter CORS errors
-// unless you explicitly enable CORS in your Spring Boot backend.
+// IMPORTANT: Set VITE_API_URL in your .env file for production deployment (e.g., https://your-backend.com).
+// For local development, you can leave it empty to use the Vite proxy (configured in vite.config.ts),
+// which forwards /api requests to http://localhost:8080.
 const CHAT_URL = `${import.meta.env.VITE_API_URL || ''}/api/v1/chat/ask`;
 
 /**
