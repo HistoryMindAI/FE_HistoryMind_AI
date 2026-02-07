@@ -1,25 +1,28 @@
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { User, Feather } from 'lucide-react';
+import { forwardRef } from 'react';
 import type { Message } from '@/hooks/useChatStream';
 
 interface ChatMessageProps {
   message: Message;
 }
 
-export function ChatMessage({ message }: ChatMessageProps) {
-  const isUser = message.role === 'user';
+export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
+  ({ message }, ref) => {
+    const isUser = message.role === 'user';
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+    return (
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ 
         duration: 0.4, 
         ease: [0.25, 0.46, 0.45, 0.94]
       }}
-      className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
-    >
+        className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+      >
       {/* Avatar */}
       <motion.div
         initial={{ scale: 0 }}
@@ -86,3 +89,6 @@ export function ChatMessage({ message }: ChatMessageProps) {
     </motion.div>
   );
 }
+);
+
+ChatMessage.displayName = 'ChatMessage';
