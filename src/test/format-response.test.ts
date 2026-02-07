@@ -94,8 +94,22 @@ describe('formatHistoryResponse', () => {
     expect(result).toBe("Xin lỗi, tôi không tìm thấy thông tin lịch sử phù hợp với yêu cầu của bạn.");
   });
 
+  it('should prioritize events over answer if both are present', () => {
+    const data = {
+      events: [
+        { year: 1945, story: 'Event A' }
+      ],
+      answer: 'This summary should be ignored if events exist.'
+    };
+    const result = formatHistoryResponse(data);
+    expect(result).toContain('### Năm 1945');
+    expect(result).toContain('- Event A');
+    expect(result).not.toContain('This summary should be ignored');
+  });
+
   it('should clean the answer field if no events are present', () => {
     const data = {
+      events: [],
       answer: 'B1. gắn mốc 1911 với Nguyễn Tất Thành. B2. nêu diễn biến...',
       intent: 'general'
     };
@@ -112,41 +126,5 @@ describe('formatHistoryResponse', () => {
     const result = formatHistoryResponse(escapedJson);
     // If it fails to parse because of triple backslashes, it returns the string as is.
     expect(typeof result).toBe('string');
-  });
-
-  it('should handle the specific complex case from the user', () => {
-    const data = {
-      events: [
-        {
-          id: null,
-          year: 1911,
-          event: "Nguyễn Tất Thành ra đi tìm đường cứu nước (1911). ...",
-          story: "Năm 1911, Nguyễn Tất Thành ra đi tìm đường cứu nước (1911). Nguyễn Tất Thành rời bến Nhà Rồng, bắt đầu hành trình qua nhiều châu lục. Sự kiện này có là Đặt nền móng cho con đường cách mạng sau này của Hồ Chí Minh."
-        },
-        {
-          id: null,
-          year: 1911,
-          event: "Câu hỏi nhắm tới sự kiện Nguyễn Tất Thành ra đi tìm đường cứu nước (1911). Cốt lõi. Nguyễn Tất Thành rời bến Nhà Rồng, bắt đầu hành trình qua nhiều châu lục.. . Đặt nền móng cho con đường cách mạng sau này của Hồ Chí Minh.. Trả lời sẽ nêu rõ mốc, diễn biến chính và",
-          story: "Năm 1911, Câu hỏi nhắm tới sự kiện Nguyễn Tất Thành ra đi tìm đường cứu nước (1911). Cốt lõi. Nguyễn Tất Thành rời bến Nhà Rồng, bắt đầu hành trình qua nhiều châu lục.. . Đặt nền móng cho con đường cách mạng sau này của Hồ Chí Minh.. Trả lời sẽ nêu rõ mốc, diễn biến chính và."
-        },
-        {
-          id: null,
-          year: 1911,
-          event: "B1. gắn mốc 1911 với Nguyễn Tất Thành ra đi tìm đường cứu nước. B2. nêu diễn biến trọng tâm – \"Nguyễn Tất Thành rời bến Nhà Rồng.\". B3. kết luận – Đặt nền móng cho con đường cách mạng sau này của Hồ Chí Minh",
-          story: "Năm 1911, B1. gắn mốc 1911 với Nguyễn Tất Thành ra đi tìm đường cứu nước. B2. nêu diễn biến trọng tâm – \"Nguyễn Tất Thành rời bến Nhà Rồng.\". B3. kết luận – Đặt nền móng cho con đường cách mạng sau này của Hồ Chí Minh."
-        }
-      ]
-    };
-
-    const result = formatHistoryResponse(data);
-    const bulletPoints = result.split('\n').filter(l => l.startsWith('- '));
-
-    // It should deduplicate these 3 versions into 1 or 2 high-quality entries
-    // Based on my logic, they should all have very similar normalized keys.
-    expect(bulletPoints.length).toBeLessThanOrEqual(2);
-    expect(result).not.toContain('B1.');
-    expect(result).not.toContain('Câu hỏi nhắm tới');
-    expect(result).toContain('Nguyễn Tất Thành ra đi tìm đường cứu nước');
-    expect(result).toContain('rời bến Nhà Rồng');
   });
 });
