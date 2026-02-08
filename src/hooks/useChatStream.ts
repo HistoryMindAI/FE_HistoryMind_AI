@@ -178,7 +178,7 @@ export function useChatStream() {
     } finally {
       setIsLoading(false);
     }
-  }, [messages]);
+  }, []);
 
   const clearMessages = useCallback(() => {
     setMessages([]);
