@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Translation, getTranslation, Language } from '@/lib/i18n';
+import trongDongLight from '@/assets/trong-dong.png';
+import trongDongDark from '@/assets/trong_dong_2.png';
 
 type Theme = 'light' | 'dark';
 type Language = 'vi' | 'en';
@@ -22,8 +25,8 @@ function setFavicon(theme: Theme) {
   const link = document.getElementById('favicon') as HTMLLinkElement | null;
   if (!link) return;
 
-  // Safari cache rất gắt → bust cache
-  link.href = `/favicon.ico?v=${Date.now()}`;
+  const faviconUrl = theme === 'dark' ? trongDongDark : trongDongLight;
+  link.href = `${faviconUrl}?v=${Date.now()}`;
 }
 
 /* =========================
