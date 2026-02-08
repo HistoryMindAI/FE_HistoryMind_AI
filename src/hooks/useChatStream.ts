@@ -8,7 +8,7 @@ export type Message = {
 };
 
 // Helper function to ensure URL has a protocol
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
   let url = import.meta.env.VITE_API_URL || '';
   // If URL is present and doesn't start with http/https, prepend https://
   if (url && !url.match(/^https?:\/\//)) {
@@ -20,7 +20,6 @@ const getBaseUrl = () => {
 // IMPORTANT: Set VITE_API_URL in your .env file for production deployment (e.g., https://your-backend.com).
 // For local development, you can leave it empty to use the Vite proxy (configured in vite.config.ts),
 // which forwards /api requests to http://localhost:8080.
-const CHAT_URL = `${getBaseUrl()}/api/v1/chat/ask`;
 
 /**
  * SPRING BOOT CORS CONFIGURATION REFERENCE:
@@ -108,6 +107,8 @@ Do NOT repeat the previous answer if it is not relevant to the new question.`;
 
         messagesPayload[messagesPayload.length - 1].content += systemInstruction;
       }
+
+      const CHAT_URL = `${getBaseUrl()}/api/v1/chat/ask`;
 
       const response = await fetch(CHAT_URL, {
         method: 'POST',
