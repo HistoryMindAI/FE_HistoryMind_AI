@@ -13,3 +13,8 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+Object.defineProperty(window.crypto, "randomUUID", {
+  writable: true,
+  value: () => "mocked-uuid",
+});
