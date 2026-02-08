@@ -81,28 +81,8 @@ describe('useChatStream', () => {
     expect(fetch).toHaveBeenCalled();
   });
 
-  it('should inject system instruction for date range queries', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      json: async () => ({ answer: "Response" }),
-    } as Response);
-
-    const { result } = renderHook(() => useChatStream());
-
-    await act(async () => {
-      await result.current.sendMessage('Events from 1945 to 2000');
-    });
-
-    expect(fetch).toHaveBeenCalledTimes(1);
-    const callArgs = vi.mocked(fetch).mock.calls[0];
-    const body = JSON.parse(callArgs[1]?.body as string);
-
-    // Check that the last message contains the system instruction
-    const lastMessage = body.messages[body.messages.length - 1];
-    expect(lastMessage.content).toContain('[SYSTEM INSTRUCTION: You are History Mind AI.');
-    expect(lastMessage.content).toContain('list events for EVERY year in that range');
-  });
+  // NOTE: System instruction injection moved to backend (engine.py)
+  // FE no longer injects system instructions into messages
 
   it('should handle streaming responses', async () => {
     const stream = new ReadableStream({
@@ -131,7 +111,7 @@ describe('useChatStream', () => {
 
     // Wait for the final state
     await waitFor(() => {
-        expect(result.current.isLoading).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
     expect(result.current.messages).toHaveLength(2);
