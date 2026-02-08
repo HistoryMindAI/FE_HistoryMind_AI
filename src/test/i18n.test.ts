@@ -1,78 +1,30 @@
-/**
- * i18n Tests
- * 
- * Tests for internationalization functions
- */
-import { describe, it, expect, beforeEach } from 'vitest';
-import {
-    getLanguage,
-    setLanguage,
-    t,
-    getAvailableLanguages
-} from '../lib/i18n';
+import { describe, it, expect } from 'vitest';
+import { getTranslation } from '../lib/i18n';
 
 describe('i18n - Internationalization', () => {
-    beforeEach(() => {
-        // Reset to default language before each test
-        setLanguage('vi');
-    });
-
-    describe('getLanguage', () => {
-        it('should return current language', () => {
-            const lang = getLanguage();
-            expect(['vi', 'en']).toContain(lang);
-        });
-    });
-
-    describe('setLanguage', () => {
-        it('should change language to English', () => {
-            setLanguage('en');
-            expect(getLanguage()).toBe('en');
+    describe('getTranslation', () => {
+        it('should return Vietnamese translations', () => {
+            const t = getTranslation('vi');
+            expect(t).toBeDefined();
+            expect(t.chat.send).toBe('Gửi');
+            expect(t.settings.title).toBe('Cài đặt');
         });
 
-        it('should change language to Vietnamese', () => {
-            setLanguage('vi');
-            expect(getLanguage()).toBe('vi');
-        });
-    });
-
-    describe('getAvailableLanguages', () => {
-        it('should return array of available languages', () => {
-            const languages = getAvailableLanguages();
-            expect(Array.isArray(languages)).toBe(true);
-            expect(languages.length).toBeGreaterThan(0);
+        it('should return English translations', () => {
+            const t = getTranslation('en');
+            expect(t).toBeDefined();
+            expect(t.chat.send).toBe('Send');
+            expect(t.settings.title).toBe('Settings');
         });
 
-        it('should include vi and en', () => {
-            const languages = getAvailableLanguages();
-            expect(languages).toContain('vi');
-            expect(languages).toContain('en');
-        });
-    });
+        it('should have matching keys for both languages', () => {
+            const vi = getTranslation('vi');
+            const en = getTranslation('en');
 
-    describe('t - translation function', () => {
-        it('should return translated string for Vietnamese', () => {
-            setLanguage('vi');
-            const result = t('welcome');
-            expect(typeof result).toBe('string');
-            expect(result.length).toBeGreaterThan(0);
-        });
-
-        it('should return translated string for English', () => {
-            setLanguage('en');
-            const result = t('welcome');
-            expect(typeof result).toBe('string');
-            expect(result.length).toBeGreaterThan(0);
-        });
-
-        it('should return key if translation not found', () => {
-            const result = t('nonexistent_key_12345');
-            expect(result).toBe('nonexistent_key_12345');
-        });
-
-        it('should handle nested keys', () => {
-            const result = t('chat.placeholder');
-            expect(typeof result).toBe('string');
+            // Deep check structure
+            expect(Object.keys(vi)).toEqual(Object.keys(en));
+            expect(Object.keys(vi.chat)).toEqual(Object.keys(en.chat));
+            expect(Object.keys(vi.settings)).toEqual(Object.keys(en.settings));
         });
     });
 });
