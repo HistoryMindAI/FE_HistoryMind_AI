@@ -60,7 +60,7 @@ function getNormalizedKey(text: string): string {
 export function formatHistoryResponse(data: unknown): string {
   if (!data) return '';
 
-  let obj: any = data;
+  let obj: Record<string, unknown> = data as Record<string, unknown>;
 
   // If data is a string, try to parse it as JSON first
   if (typeof data === 'string') {
@@ -93,10 +93,10 @@ export function formatHistoryResponse(data: unknown): string {
       const processedEvents: { year: string, content: string, key: string }[] = [];
       const seenKeys = new Set<string>();
 
-      rawEvents.forEach((ev: any) => {
+      rawEvents.forEach((ev: Record<string, unknown>) => {
         if (!ev) return;
         const year = ev.year !== undefined && ev.year !== null ? String(ev.year) : 'Khác';
-        let rawContent = (ev.story || ev.event || '').trim();
+        const rawContent = (ev.story || ev.event || '') as string;
         if (!rawContent) return;
 
         const cleanedContent = cleanTechnicalText(rawContent);
