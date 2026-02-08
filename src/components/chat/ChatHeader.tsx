@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import { Sparkles, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTheme } from '@/hooks/useTheme';
+import trongDongLight from '@/assets/trong-dong.png';
+import trongDongDark from '@/assets/trong_dong_2.png';
 
 interface ChatHeaderProps {
   onReset?: () => void;
@@ -8,6 +11,8 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({ onReset, showReset = false }: ChatHeaderProps) {
+  const { theme } = useTheme();
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
@@ -18,23 +23,25 @@ export function ChatHeader({ onReset, showReset = false }: ChatHeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Logo mark */}
-          <motion.div 
+          <motion.div
             className="relative"
             whileHover={{ scale: 1.03 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary via-[hsl(45_55%_60%)] to-secondary flex items-center justify-center shadow-md shadow-secondary/30">
-              <span className="font-display text-lg font-bold text-secondary-foreground drop-shadow-sm">S</span>
-            </div>
+            <img
+              src={theme === 'dark' ? trongDongDark : trongDongLight}
+              alt="History Mind AI Logo"
+              className="w-10 h-10 object-contain drop-shadow-md"
+            />
           </motion.div>
-          
+
           <div>
             <h1 className="font-display text-lg font-semibold tracking-tight text-foreground">
-              Sử Việt
+              History Mind AI
             </h1>
             <p className="text-[11px] text-muted-foreground/70 font-medium flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5 text-secondary" />
-              Trợ lý lịch sử AI
+              AI Assistant
             </p>
           </div>
         </div>
