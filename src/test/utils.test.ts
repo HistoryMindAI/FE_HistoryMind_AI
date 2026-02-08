@@ -21,7 +21,8 @@ describe('cn - className utility', () => {
     });
 
     it('should filter out falsy values', () => {
-        const result = cn('base', false && 'hidden', undefined, null);
+        const isVisible = false;
+        const result = cn('base', isVisible && 'hidden', undefined, null);
         expect(result).toBe('base');
     });
 
