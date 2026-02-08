@@ -109,6 +109,7 @@ Do NOT repeat the previous answer if it is not relevant to the new question.`;
       }
 
       const CHAT_URL = `${getBaseUrl()}/api/v1/chat/ask`;
+      console.log('Sending request to:', CHAT_URL);
 
       const response = await fetch(CHAT_URL, {
         method: 'POST',
@@ -123,8 +124,18 @@ Do NOT repeat the previous answer if it is not relevant to the new question.`;
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Error: ${response.status}`);
+        const errorText = await response.text();
+        let errorMessage = `Error: ${response.status}`;
+
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.error || errorMessage;
+        } catch {
+          if (errorText) {
+            errorMessage += ` - ${errorText.slice(0, 100)}`;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const contentType = response.headers.get('Content-Type');

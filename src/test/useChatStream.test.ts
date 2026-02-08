@@ -40,6 +40,7 @@ describe('useChatStream', () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: false,
       status: 500,
+      text: async () => JSON.stringify({ error: 'Server Error' }),
       json: async () => ({ error: 'Server Error' }),
     } as Response);
 
