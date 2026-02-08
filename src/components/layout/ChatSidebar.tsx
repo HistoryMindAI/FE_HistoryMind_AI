@@ -6,6 +6,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SettingsModal } from '@/components/settings/SettingsModal';
 import { useThemeContext } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import trongDongLight from '@/assets/trong-dong.png';
+import trongDongDark from '@/assets/trong_dong_2.png';
 
 interface ChatSession {
   id: string;
@@ -22,14 +24,14 @@ interface ChatSidebarProps {
   currentSessionId?: string;
 }
 
-export function ChatSidebar({ 
-  isOpen, 
-  onToggle, 
+export function ChatSidebar({
+  isOpen,
+  onToggle,
   onNewChat,
   onSelectSession,
-  currentSessionId 
+  currentSessionId
 }: ChatSidebarProps) {
-  const { t } = useThemeContext();
+  const { t, theme } = useThemeContext();
 
   // Demo data - sau này sẽ lấy từ database
   const demoSessions: ChatSession[] = [
@@ -72,13 +74,17 @@ export function ChatSidebar({
             {/* Header */}
             <div className="p-4 border-b border-border/30">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <span className="font-display text-sm font-bold text-primary-foreground">S</span>
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <img
+                    src={theme === 'dark' ? trongDongDark : trongDongLight}
+                    alt="Logo"
+                    className="w-8 h-8 object-contain"
+                  />
                 </div>
                 <span className="font-display font-semibold text-foreground">{t.header.title}</span>
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={onNewChat}
                 className="w-full gap-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20"
                 variant="outline"
@@ -94,7 +100,7 @@ export function ChatSidebar({
                 <p className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t.sidebar.history}
                 </p>
-                
+
                 {demoSessions.map((session) => (
                   <motion.button
                     key={session.id}
@@ -132,7 +138,7 @@ export function ChatSidebar({
                 <p className="text-[10px] text-muted-foreground/60">
                   {t.sidebar.assistant}
                 </p>
-                <SettingsModal 
+                <SettingsModal
                   trigger={
                     <Button
                       variant="ghost"
