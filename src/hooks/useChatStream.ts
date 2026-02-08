@@ -8,7 +8,7 @@ export type Message = {
 };
 
 // Helper function to ensure URL has a protocol
-export const getBaseUrl = () => {
+const getBaseUrl = () => {
   let url = import.meta.env.VITE_API_URL || '';
   // If URL is present and doesn't start with http/https, prepend https://
   if (url && !url.match(/^https?:\/\//)) {
@@ -20,6 +20,7 @@ export const getBaseUrl = () => {
 // IMPORTANT: Set VITE_API_URL in your .env file for production deployment (e.g., https://your-backend.com).
 // For local development, you can leave it empty to use the Vite proxy (configured in vite.config.ts),
 // which forwards /api requests to http://localhost:8080.
+const CHAT_URL = `${getBaseUrl()}/api/v1/chat/ask`;
 
 /**
  * SPRING BOOT CORS CONFIGURATION REFERENCE:
@@ -52,29 +53,14 @@ export function useChatStream() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sendMessage = useCallback(async (input: string) => {
-    // Identity Check (Client-side optimization)
-    if (input.match(/(who are you|bạn là ai|giới thiệu|what is your name|tên bạn là gì)/i)) {
-      const userMessage: Message = {
-        id: crypto.randomUUID(),
-        role: 'user',
-        content: input,
-      };
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: "Xin chào, tôi là History Mind AI. Tôi ở đây để giúp bạn tìm hiểu về lịch sử Việt Nam và thế giới. Bạn có câu hỏi nào không?",
-      };
-      setMessages(prev => [...prev, userMessage, assistantMessage]);
-      return;
-    }
 
+  const sendMessage = useCallback(async (input: string) => {
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
       content: input,
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setError(null);
@@ -83,59 +69,20 @@ export function useChatStream() {
     const assistantId = crypto.randomUUID();
 
     try {
-      // Prepare payload with system instructions
-      const messagesPayload = [...messages, userMessage].map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
-
-      // Inject system instruction into the last message to guide the backend LLM
-      if (messagesPayload.length > 0) {
-        const isRangeQuery = /(?:từ|năm)\s+(\d{3,4})\s+(?:đến|tới|-)\s+(?:năm\s+)?(\d{3,4})/i.test(input) || /(?:from)\s+(\d{3,4})\s+(?:to|-)\s+(\d{3,4})/i.test(input);
-
-        let systemInstruction = `\n\n[SYSTEM INSTRUCTION: You are History Mind AI.
-If the user asks who you are, introduce yourself as History Mind AI.
-If the user asks for events between two years (e.g., 1945-2000), you MUST list events for EVERY year in that range, not just the start year.
-If you cannot find information for the specific question asked, return {"no_data": true}.
-Do NOT repeat the previous answer if it is not relevant to the new question.`;
-
-        if (isRangeQuery) {
-          systemInstruction += " The user is asking for a range. Retrieve and list events for ALL years in this range.";
-        }
-
-        systemInstruction += "]";
-
-        messagesPayload[messagesPayload.length - 1].content += systemInstruction;
-      }
-
-      const CHAT_URL = `${getBaseUrl()}/api/v1/chat/ask`;
-      console.log('Sending request to:', CHAT_URL);
-
+      // Send query to backend - all AI logic is handled server-side
       const response = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Authorization headers can be added here if needed
         },
         body: JSON.stringify({
           query: input,
-          messages: messagesPayload,
         }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        let errorMessage = `Error: ${response.status}`;
-
-        try {
-          const errorJson = JSON.parse(errorText);
-          errorMessage = errorJson.error || errorMessage;
-        } catch {
-          if (errorText) {
-            errorMessage += ` - ${errorText.slice(0, 100)}`;
-          }
-        }
-        throw new Error(errorMessage);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Error: ${response.status}`);
       }
 
       const contentType = response.headers.get('Content-Type');
