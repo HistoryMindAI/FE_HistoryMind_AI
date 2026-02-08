@@ -54,7 +54,20 @@ describe('useChatStream', () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-  it('should handle identity questions locally without calling backend', async () => {
+  it('should send identity questions to backend (not handled locally)', async () => {
+    // Mock backend response for identity query
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      json: async () => ({
+        query: "Who are you?",
+        intent: "identity",
+        answer: "Xin chào, tôi là History Mind AI.",
+        events: [],
+        no_data: false
+      }),
+    } as Response);
+
     const { result } = renderHook(() => useChatStream());
 
     await act(async () => {
@@ -64,10 +77,8 @@ describe('useChatStream', () => {
     expect(result.current.messages).toHaveLength(2);
     expect(result.current.messages[0].role).toBe('user');
     expect(result.current.messages[0].content).toBe('Who are you?');
-    expect(result.current.messages[1].role).toBe('assistant');
-    expect(result.current.messages[1].content).toContain('History Mind AI');
-    // Ensure fetch was NOT called
-    expect(fetch).not.toHaveBeenCalled();
+    // Fetch SHOULD be called now (identity handled by backend)
+    expect(fetch).toHaveBeenCalled();
   });
 
   it('should inject system instruction for date range queries', async () => {

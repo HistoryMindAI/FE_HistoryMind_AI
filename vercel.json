@@ -1,0 +1,7 @@
+# Vercel Configuration for Frontend
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm ci"
+}
