@@ -2,13 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useChatStream } from '../hooks/useChatStream';
 
-// Mock crypto.randomUUID
-if (!global.crypto) {
-  global.crypto = { randomUUID: () => 'test-uuid-' + Math.random() } as Crypto;
-} else if (!global.crypto.randomUUID) {
-  global.crypto.randomUUID = () => 'test-uuid-' + Math.random();
-}
-
 describe('useChatStream', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
@@ -37,6 +30,7 @@ describe('useChatStream', () => {
     expect(result.current.messages).toHaveLength(2);
     expect(result.current.messages[0].role).toBe('user');
     expect(result.current.messages[1].role).toBe('assistant');
+    // Expect formatted content
     expect(result.current.messages[1].content).toContain('### Năm 938');
     expect(result.current.isLoading).toBe(false);
   });
@@ -56,5 +50,21 @@ describe('useChatStream', () => {
 
     expect(result.current.error).toBe('Server Error');
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it('should handle identity questions locally without calling backend', async () => {
+    const { result } = renderHook(() => useChatStream());
+
+    await act(async () => {
+      await result.current.sendMessage('Who are you?');
+    });
+
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages[0].role).toBe('user');
+    expect(result.current.messages[0].content).toBe('Who are you?');
+    expect(result.current.messages[1].role).toBe('assistant');
+    expect(result.current.messages[1].content).toContain('History Mind AI');
+    // Ensure fetch was NOT called
+    expect(fetch).not.toHaveBeenCalled();
   });
 });
