@@ -23,10 +23,7 @@ function setFavicon(theme: Theme) {
   if (!link) return;
 
   // Safari cache rất gắt → bust cache
-  link.href =
-    theme === 'dark'
-      ? `./src/assets/trong_dong_2.png?v=${Date.now()}`
-      : `./src/assets/trong-dong.png?v=${Date.now()}`;
+  link.href = `/favicon.ico?v=${Date.now()}`;
 }
 
 /* =========================
@@ -73,8 +70,18 @@ export function useTheme() {
   /* =========================
      ACTIONS
   ========================= */
+  /* =========================
+     ACTIONS
+  ========================= */
   const setTheme = (theme: Theme) => {
     setSettings(prev => ({ ...prev, theme }));
+  };
+
+  const toggleTheme = () => {
+    setSettings(prev => ({
+      ...prev,
+      theme: prev.theme === 'light' ? 'dark' : 'light'
+    }));
   };
 
   const setLanguage = (language: Language) => {
@@ -86,6 +93,7 @@ export function useTheme() {
     language: settings.language,
     setTheme,
     setLanguage,
+    toggleTheme,
   };
 }
 
