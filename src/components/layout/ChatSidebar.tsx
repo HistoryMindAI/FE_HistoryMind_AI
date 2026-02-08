@@ -6,8 +6,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SettingsModal } from '@/components/settings/SettingsModal';
 import { useThemeContext } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
-import trongDongLight from '@/assets/trong-dong.png';
-import trongDongDark from '@/assets/trong_dong_2.png';
 
 interface ChatSession {
   id: string;
@@ -31,7 +29,7 @@ export function ChatSidebar({
   onSelectSession,
   currentSessionId
 }: ChatSidebarProps) {
-  const { t, theme } = useThemeContext();
+  const { t } = useThemeContext();
 
   // Demo data - sau này sẽ lấy từ database
   const demoSessions: ChatSession[] = [
@@ -74,12 +72,8 @@ export function ChatSidebar({
             {/* Header */}
             <div className="p-4 border-b border-border/30">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <img
-                    src={theme === 'dark' ? trongDongDark : trongDongLight}
-                    alt="Logo"
-                    className="w-8 h-8 object-contain"
-                  />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <span className="font-display text-sm font-bold text-primary-foreground">S</span>
                 </div>
                 <span className="font-display font-semibold text-foreground">{t.header.title}</span>
               </div>
