@@ -47,19 +47,8 @@ describe('API Integration - Request/Response Contract', () => {
         expect(body.query).toContain('Năm 1945');
     });
 
-    it('should send messages array in request body', async () => {
-        const { result } = renderHook(() => useChatStream());
-
-        await act(async () => {
-            await result.current.sendMessage('First question');
-        });
-
-        expect(capturedRequest).not.toBeNull();
-
-        const body = JSON.parse(capturedRequest!.options.body as string);
-        expect(body).toHaveProperty('messages');
-        expect(Array.isArray(body.messages)).toBe(true);
-    });
+    // NOTE: messages array removed - FE now only sends { query }
+    // Backend handles all AI logic including conversation context
 
     it('should call correct API endpoint', async () => {
         const { result } = renderHook(() => useChatStream());
