@@ -1,0 +1,64 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'vite.config.ts'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint --if-present
+      
+      - name: Run tests
+        run: npm run test -- --run
+      
+      - name: Build
+        run: npm run build
+
+  # Vercel automatically deploys on push to main
+  # This job just verifies the build works
+  verify-build:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Production build
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
