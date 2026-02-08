@@ -116,7 +116,7 @@ Do NOT repeat the previous answer if it is not relevant to the new question.`;
           // Authorization headers can be added here if needed
         },
         body: JSON.stringify({
-          question: input,
+          query: input,
           messages: messagesPayload,
         }),
       });
