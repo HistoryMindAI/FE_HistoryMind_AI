@@ -6,15 +6,16 @@ Object.defineProperty(window, "matchMedia", {
     matches: false,
     media: query,
     onchange: null,
-    addListener: () => {},
-    removeListener: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => {},
+    addListener: () => { },
+    removeListener: () => { },
+    addEventListener: () => { },
+    removeEventListener: () => { },
+    dispatchEvent: () => { },
   }),
 });
 
+let uuidCounter = 0;
 Object.defineProperty(window.crypto, "randomUUID", {
   writable: true,
-  value: () => "mocked-uuid",
+  value: () => `mocked-uuid-${uuidCounter++}`,
 });
