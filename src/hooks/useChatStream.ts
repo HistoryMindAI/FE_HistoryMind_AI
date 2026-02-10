@@ -61,15 +61,19 @@ export function useChatStream() {
       content: input,
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setIsLoading(true);
-    setError(null);
-
     let assistantContent = '';
     const assistantId = crypto.randomUUID();
+    const thinkingMessage: Message = {
+      id: assistantId,
+      role: 'assistant',
+      content: '', // Empty content triggers thinking dots animation in ChatMessage
+    };
 
-    // Add empty assistant message immediately to show thinking dots animation
-    setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+    // Add both user message and thinking indicator in a single state update
+    // to avoid React batching race conditions
+    setMessages(prev => [...prev, userMessage, thinkingMessage]);
+    setIsLoading(true);
+    setError(null);
 
     try {
       // Send query to backend - all AI logic is handled server-side
