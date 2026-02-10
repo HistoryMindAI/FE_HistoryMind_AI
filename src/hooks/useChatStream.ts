@@ -68,6 +68,9 @@ export function useChatStream() {
     let assistantContent = '';
     const assistantId = crypto.randomUUID();
 
+    // Add empty assistant message immediately to show thinking dots animation
+    setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+
     try {
       // Send query to backend - all AI logic is handled server-side
       const response = await fetch(CHAT_URL, {
@@ -90,7 +93,14 @@ export function useChatStream() {
       if (contentType?.includes('application/json')) {
         const data = await response.json();
         assistantContent = formatHistoryResponse(data);
-        setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: assistantContent }]);
+        // Update existing empty message with actual content
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === assistantId
+              ? { ...m, content: assistantContent }
+              : m
+          )
+        );
       } else {
         if (!response.body) {
           throw new Error('No response body');
@@ -100,8 +110,7 @@ export function useChatStream() {
         const decoder = new TextDecoder();
         let textBuffer = '';
 
-        // Add initial assistant message
-        setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+        // Assistant message already added (with empty content showing thinking dots)
 
         while (true) {
           const { done, value } = await reader.read();
