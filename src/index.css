@@ -16,8 +16,8 @@
     --popover: 32 22% 95%;
     --popover-foreground: 25 30% 12%;
 
-    /* Nâu son - Warm Terracotta */
-    --primary: 15 45% 35%;
+    /* Vàng đồng cổ - Antique Gold (Primary) */
+    --primary: 38 50% 42%;
     --primary-foreground: 30 25% 97%;
 
     /* Vàng đồng cổ - Antique Gold */
@@ -28,8 +28,8 @@
     --muted: 30 18% 90%;
     --muted-foreground: 25 15% 45%;
 
-    /* Accent - Deep mahogany */
-    --accent: 18 35% 28%;
+    /* Accent - Deep gold */
+    --accent: 35 40% 32%;
     --accent-foreground: 30 25% 97%;
 
     --destructive: 0 65% 50%;
@@ -37,13 +37,13 @@
 
     --border: 30 15% 85%;
     --input: 30 18% 88%;
-    --ring: 15 45% 35%;
+    --ring: 38 50% 42%;
 
     --radius: 0.625rem;
 
     /* Custom Vietnamese theme tokens */
-    --terracotta: 15 45% 35%;
-    --terracotta-light: 15 40% 45%;
+    --terracotta: 38 50% 42%;
+    --terracotta-light: 38 45% 52%;
     --gold: 38 50% 52%;
     --gold-muted: 35 35% 60%;
     --paper: 30 25% 97%;
@@ -52,23 +52,23 @@
     --ink-light: 25 20% 40%;
 
     /* Glow effects */
-    --glow-primary: 0 0 20px hsl(15 45% 35% / 0.3);
+    --glow-primary: 0 0 20px hsl(38 50% 42% / 0.3);
     --glow-gold: 0 0 30px hsl(38 50% 52% / 0.25);
 
     /* Gradients */
-    --gradient-warm: linear-gradient(135deg, hsl(15 45% 35%) 0%, hsl(18 35% 28%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(38 50% 42%) 0%, hsl(35 40% 32%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(38 50% 52%) 0%, hsl(35 40% 50%) 100%);
     --gradient-paper: linear-gradient(180deg, hsl(30 25% 97%) 0%, hsl(32 22% 94%) 100%);
     --gradient-glass: linear-gradient(135deg, hsl(30 25% 97% / 0.8) 0%, hsl(32 22% 94% / 0.6) 100%);
 
     --sidebar-background: 32 22% 95%;
     --sidebar-foreground: 25 30% 12%;
-    --sidebar-primary: 15 45% 35%;
+    --sidebar-primary: 38 50% 42%;
     --sidebar-primary-foreground: 30 25% 97%;
     --sidebar-accent: 30 18% 90%;
     --sidebar-accent-foreground: 25 30% 12%;
     --sidebar-border: 30 15% 85%;
-    --sidebar-ring: 15 45% 35%;
+    --sidebar-ring: 38 50% 42%;
   }
 
   .dark {
@@ -83,8 +83,8 @@
     --popover: 22 14% 11%;
     --popover-foreground: 35 20% 90%;
 
-    /* Terracotta adjusted for dark - warmer and more vibrant */
-    --primary: 15 50% 55%;
+    /* Gold adjusted for dark - warm and vibrant */
+    --primary: 38 55% 55%;
     --primary-foreground: 20 15% 7%;
 
     /* Gold - rich and warm */
@@ -95,8 +95,8 @@
     --muted: 22 12% 15%;
     --muted-foreground: 30 15% 55%;
 
-    /* Accent - warm mahogany glow */
-    --accent: 15 40% 45%;
+    /* Accent - warm gold glow */
+    --accent: 35 45% 40%;
     --accent-foreground: 35 20% 92%;
 
     --destructive: 0 60% 50%;
@@ -105,11 +105,11 @@
     /* Borders with warm undertone */
     --border: 25 10% 18%;
     --input: 25 12% 16%;
-    --ring: 15 50% 55%;
+    --ring: 38 55% 55%;
 
     /* Custom theme tokens for dark */
-    --terracotta: 15 50% 55%;
-    --terracotta-light: 15 45% 62%;
+    --terracotta: 38 55% 55%;
+    --terracotta-light: 38 50% 62%;
     --gold: 38 55% 55%;
     --gold-muted: 35 40% 48%;
     --paper: 20 15% 7%;
@@ -118,11 +118,11 @@
     --ink-light: 30 15% 65%;
 
     /* Enhanced glows for dark mode */
-    --glow-primary: 0 0 30px hsl(15 50% 55% / 0.35);
+    --glow-primary: 0 0 30px hsl(38 55% 55% / 0.35);
     --glow-gold: 0 0 40px hsl(38 55% 55% / 0.25);
 
     /* Glass effect for dark */
-    --gradient-warm: linear-gradient(135deg, hsl(15 50% 55%) 0%, hsl(15 40% 45%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(38 55% 55%) 0%, hsl(35 45% 40%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(38 55% 55%) 0%, hsl(35 50% 50%) 100%);
     --gradient-paper: linear-gradient(180deg, hsl(20 15% 7%) 0%, hsl(22 14% 11%) 100%);
     --gradient-glass: linear-gradient(135deg, hsl(22 14% 11% / 0.85) 0%, hsl(22 12% 14% / 0.7) 100%);
@@ -130,12 +130,12 @@
     /* Sidebar */
     --sidebar-background: 20 14% 9%;
     --sidebar-foreground: 35 20% 90%;
-    --sidebar-primary: 15 50% 55%;
+    --sidebar-primary: 38 55% 55%;
     --sidebar-primary-foreground: 20 15% 7%;
     --sidebar-accent: 22 12% 15%;
     --sidebar-accent-foreground: 35 20% 90%;
     --sidebar-border: 25 10% 18%;
-    --sidebar-ring: 15 50% 55%;
+    --sidebar-ring: 38 55% 55%;
   }
 }
 
@@ -172,7 +172,7 @@
 
   .text-gradient-warm {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(15 45% 40%) 0%, hsl(25 50% 45%) 100%);
+    background-image: linear-gradient(135deg, hsl(38 50% 45%) 0%, hsl(45 55% 55%) 100%);
   }
 
   .bg-pattern-subtle {
