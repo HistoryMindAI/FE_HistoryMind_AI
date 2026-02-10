@@ -202,23 +202,35 @@
   }
 
   .chat-bubble-user {
-    @apply text-primary-foreground;
-    background: linear-gradient(135deg, hsl(var(--primary) / 0.55) 0%, hsl(var(--accent) / 0.45) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid hsl(var(--primary) / 0.25);
+    @apply bg-gradient-to-br from-primary/90 to-accent/90 text-primary-foreground backdrop-blur-sm;
     border-radius: 1.25rem 1.25rem 0.375rem 1.25rem;
-    box-shadow: 
-      0 4px 24px -4px hsl(var(--primary) / 0.2),
-      inset 0 1px 0 hsl(0 0% 100% / 0.1);
+    box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.3);
   }
 
   .chat-bubble-ai {
-    background: hsl(var(--card) / 0.25);
+    @apply bg-card/50 backdrop-blur-[2px] border border-border/30;
+    color: hsl(var(--primary));
+    border-radius: 1.25rem 1.25rem 1.25rem 0.375rem;
+  }
+
+  /* Dark mode: liquid glass */
+  .dark .chat-bubble-user {
+    @apply text-foreground;
+    background: linear-gradient(135deg, hsl(48 80% 75% / 0.35) 0%, hsl(42 70% 65% / 0.3) 100%);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid hsl(48 75% 80% / 0.3);
+    border-top-color: hsl(50 85% 85% / 0.4);
+    box-shadow: 
+      0 2px 16px -4px hsl(45 60% 60% / 0.15),
+      inset 0 1px 0 hsl(48 80% 85% / 0.2);
+  }
+
+  .dark .chat-bubble-ai {
+    background: hsl(var(--card) / 0.35);
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
     border: 1px solid hsl(var(--border) / 0.2);
-    border-radius: 1.25rem 1.25rem 1.25rem 0.375rem;
     box-shadow: 
       0 2px 16px -4px hsl(0 0% 0% / 0.1),
       inset 0 1px 0 hsl(0 0% 100% / 0.06);
@@ -272,13 +284,14 @@
 
 /* Prose styles for AI responses */
 .prose-vietnamese {
-  @apply text-foreground;
+  color: inherit;
 }
 
 .prose-vietnamese h1,
 .prose-vietnamese h2,
 .prose-vietnamese h3 {
-  @apply font-display text-primary font-semibold mt-4 mb-2;
+  @apply font-display font-semibold mt-4 mb-2;
+  color: inherit;
 }
 
 .prose-vietnamese p {
@@ -295,7 +308,8 @@
 }
 
 .prose-vietnamese strong {
-  @apply text-primary font-semibold;
+  @apply font-semibold;
+  color: inherit;
 }
 
 .prose-vietnamese blockquote {
