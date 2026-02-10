@@ -202,14 +202,26 @@
   }
 
   .chat-bubble-user {
-    @apply bg-gradient-to-br from-primary/90 to-accent/90 text-primary-foreground backdrop-blur-sm;
+    @apply text-primary-foreground;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.55) 0%, hsl(var(--accent) / 0.45) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--primary) / 0.25);
     border-radius: 1.25rem 1.25rem 0.375rem 1.25rem;
-    box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.3);
+    box-shadow: 
+      0 4px 24px -4px hsl(var(--primary) / 0.2),
+      inset 0 1px 0 hsl(0 0% 100% / 0.1);
   }
 
   .chat-bubble-ai {
-    @apply bg-card/50 backdrop-blur-[2px] border border-border/30;
+    background: hsl(var(--card) / 0.25);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid hsl(var(--border) / 0.2);
     border-radius: 1.25rem 1.25rem 1.25rem 0.375rem;
+    box-shadow: 
+      0 2px 16px -4px hsl(0 0% 0% / 0.1),
+      inset 0 1px 0 hsl(0 0% 100% / 0.06);
   }
 
   .decorative-line {
