@@ -1,9 +1,10 @@
+const FAVICON_LIGHT = '/trong-dong.png';
+const FAVICON_DARK = '/trong_dong_2.png';
+
 export function setFavicon(theme: 'light' | 'dark') {
   const link = document.getElementById('favicon') as HTMLLinkElement | null;
   if (!link) return;
 
-  link.href =
-    theme === 'dark'
-      ? `/favicon-dark.ico?v=${Date.now()}`
-      : `/favicon-light.ico?v=${Date.now()}`;
+  const href = theme === 'dark' ? FAVICON_DARK : FAVICON_LIGHT;
+  link.href = `${href}?v=${Date.now()}`;
 }

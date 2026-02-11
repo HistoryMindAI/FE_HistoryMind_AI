@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Translation, getTranslation, Language } from '@/lib/i18n';
-import trongDongLight from '@/assets/trong-dong.png';
-import trongDongDark from '@/assets/trong_dong_2.png';
 
 type Theme = 'light' | 'dark';
+
+const FAVICON_LIGHT = '/trong-dong.png';
+const FAVICON_DARK = '/trong_dong_2.png';
 type Language = 'vi' | 'en';
 
 interface Settings {
@@ -25,7 +26,7 @@ function setFavicon(theme: Theme) {
   const link = document.getElementById('favicon') as HTMLLinkElement | null;
   if (!link) return;
 
-  const faviconUrl = theme === 'dark' ? trongDongDark : trongDongLight;
+  const faviconUrl = theme === 'dark' ? FAVICON_DARK : FAVICON_LIGHT;
   link.href = `${faviconUrl}?v=${Date.now()}`;
 }
 
