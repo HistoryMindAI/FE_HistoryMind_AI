@@ -114,6 +114,14 @@ export function formatHistoryResponse(data: unknown): string {
         }
       });
 
+      // PRIORITY: If answer has content AND events exist, use answer directly.
+      // The backend's format_complete_answer() already includes event details in the answer text.
+      // Rendering events array ON TOP of answer would cause duplication.
+      if (typeof obj.answer === 'string' && obj.answer.trim() && processedEvents.length > 0) {
+        return obj.answer.trim();
+      }
+
+      // FALLBACK: If no answer text, render from events array
       if (processedEvents.length > 0) {
         // Group by year
         const groups: Record<string, string[]> = {};
@@ -123,12 +131,6 @@ export function formatHistoryResponse(data: unknown): string {
         });
 
         let markdown = '';
-
-        // Prepend answer text before events when both exist
-        // This preserves context like same-person detection, relationship explanations, etc.
-        if (typeof obj.answer === 'string' && obj.answer.trim()) {
-          markdown += `${obj.answer.trim()}\n\n`;
-        }
 
         const sortedYears = Object.keys(groups).sort((a, b) => {
           if (a === 'Khác') return 1;
