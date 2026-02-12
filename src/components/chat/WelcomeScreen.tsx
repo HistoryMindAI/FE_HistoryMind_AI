@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Crown, Swords, Landmark, Sparkles } from 'lucide-react';
+import { BookOpen, Crown, Swords, Landmark, Sparkles, Shield, Scroll, MapPin, BookMarked } from 'lucide-react';
 import { useThemeContext } from '@/contexts/ThemeContext';
 
 interface WelcomeScreenProps {
@@ -19,8 +19,8 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       type: 'spring' as const,
@@ -32,7 +32,7 @@ const itemVariants = {
 
 export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
   const { t } = useThemeContext();
-  
+
   const suggestions = [
     {
       icon: Crown,
@@ -54,21 +54,41 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
       title: t.suggestions.daiViet.title,
       question: t.suggestions.daiViet.question,
     },
+    {
+      icon: MapPin,
+      title: t.suggestions.nhaLy.title,
+      question: t.suggestions.nhaLy.question,
+    },
+    {
+      icon: Shield,
+      title: t.suggestions.ngoQuyen.title,
+      question: t.suggestions.ngoQuyen.question,
+    },
+    {
+      icon: Scroll,
+      title: t.suggestions.leLoi.title,
+      question: t.suggestions.leLoi.question,
+    },
+    {
+      icon: BookMarked,
+      title: t.suggestions.tongHop.title,
+      question: t.suggestions.tongHop.question,
+    },
   ];
 
   return (
-    <motion.div 
+    <motion.div
       className="flex flex-col items-center justify-center min-h-[65vh] px-6 py-8 relative"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Hero Section - more compact */}
-      <motion.div 
+      <motion.div
         className="text-center mb-8 relative z-10"
         variants={itemVariants}
       >
-        <motion.div 
+        <motion.div
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-4"
           whileHover={{ scale: 1.02 }}
         >
@@ -81,29 +101,29 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
           {' '}
           <span className="text-foreground">{t.welcome.title2}</span>
         </h2>
-        
+
         <p className="text-muted-foreground max-w-sm mx-auto text-sm leading-relaxed">
           {t.welcome.subtitle} <span className="font-display font-semibold text-gradient-gold drop-shadow-sm">{t.welcome.highlight}</span> {t.welcome.subtitleEnd}
         </p>
       </motion.div>
 
       {/* Decorative divider */}
-      <motion.div 
+      <motion.div
         className="decorative-line w-32 mb-8"
         variants={itemVariants}
       />
 
       {/* Suggestion Cards - refined design */}
-      <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full relative z-10"
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-4xl w-full relative z-10"
         variants={containerVariants}
       >
         {suggestions.map((suggestion, index) => (
           <motion.button
             key={index}
             variants={itemVariants}
-            whileHover={{ 
-              scale: 1.01, 
+            whileHover={{
+              scale: 1.01,
               y: -2,
               transition: { type: 'spring', stiffness: 400 }
             }}
@@ -129,7 +149,7 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
       </motion.div>
 
       {/* Bottom hint */}
-      <motion.p 
+      <motion.p
         className="text-center text-xs text-secondary/50 mt-8 relative z-10"
         variants={itemVariants}
       >
