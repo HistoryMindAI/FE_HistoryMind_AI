@@ -94,17 +94,35 @@ describe('formatHistoryResponse', () => {
     expect(result).toBe("Xin lỗi, tôi không tìm thấy thông tin lịch sử phù hợp với yêu cầu của bạn.");
   });
 
-  it('should prioritize events over answer if both are present', () => {
+  it('should include answer before events when both are present', () => {
     const data = {
       events: [
         { year: 1945, story: 'Event A' }
       ],
-      answer: 'This summary should be ignored if events exist.'
+      answer: 'Context information about the query.'
     };
     const result = formatHistoryResponse(data);
     expect(result).toContain('### Năm 1945');
     expect(result).toContain('- Event A');
-    expect(result).not.toContain('This summary should be ignored');
+    // Answer should now be prepended before events
+    expect(result).toContain('Context information about the query.');
+    // Answer should appear BEFORE the year heading
+    const answerIdx = result.indexOf('Context information');
+    const yearIdx = result.indexOf('### Năm 1945');
+    expect(answerIdx).toBeLessThan(yearIdx);
+  });
+
+  it('should display same-person detection with events', () => {
+    const data = {
+      events: [
+        { year: 1789, story: 'Quang Trung đại phá quân Thanh.' }
+      ],
+      answer: '**Quang Trung** và **Nguyễn Huệ** là **cùng một người**.\n\nTên chính: **Nguyễn Huệ**\n\n---\n\nDưới đây là các sự kiện liên quan:'
+    };
+    const result = formatHistoryResponse(data);
+    expect(result).toContain('cùng một người');
+    expect(result).toContain('### Năm 1789');
+    expect(result).toContain('Quang Trung đại phá quân Thanh');
   });
 
   it('should clean the answer field if no events are present', () => {
