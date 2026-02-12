@@ -94,34 +94,43 @@ describe('formatHistoryResponse', () => {
     expect(result).toBe("Xin lỗi, tôi không tìm thấy thông tin lịch sử phù hợp với yêu cầu của bạn.");
   });
 
-  it('should include answer before events when both are present', () => {
+  it('should use answer directly when answer has content (avoid event duplication)', () => {
     const data = {
       events: [
         { year: 1945, story: 'Event A' }
       ],
-      answer: 'Context information about the query.'
+      answer: 'Context information about the query.\n\nNăm 1945: Event A details.'
     };
     const result = formatHistoryResponse(data);
-    expect(result).toContain('### Năm 1945');
-    expect(result).toContain('- Event A');
-    // Answer should now be prepended before events
+    // Answer is used directly — events array is NOT rendered separately
     expect(result).toContain('Context information about the query.');
-    // Answer should appear BEFORE the year heading
-    const answerIdx = result.indexOf('Context information');
-    const yearIdx = result.indexOf('### Năm 1945');
-    expect(answerIdx).toBeLessThan(yearIdx);
+    expect(result).toContain('Năm 1945: Event A details.');
+    // Should NOT have the events-array rendered format "### Năm 1945" + "- Event A"
+    expect(result).not.toContain('### Năm 1945');
+    expect(result).not.toContain('- Event A');
   });
 
-  it('should display same-person detection with events', () => {
+  it('should render events array when answer is empty (fallback)', () => {
     const data = {
       events: [
         { year: 1789, story: 'Quang Trung đại phá quân Thanh.' }
       ],
-      answer: '**Quang Trung** và **Nguyễn Huệ** là **cùng một người**.\n\nTên chính: **Nguyễn Huệ**\n\n---\n\nDưới đây là các sự kiện liên quan:'
+      answer: ''
+    };
+    const result = formatHistoryResponse(data);
+    expect(result).toContain('### Năm 1789');
+    expect(result).toContain('- Quang Trung đại phá quân Thanh.');
+  });
+
+  it('should display same-person detection from answer', () => {
+    const data = {
+      events: [
+        { year: 1789, story: 'Quang Trung đại phá quân Thanh.' }
+      ],
+      answer: '**Quang Trung** và **Nguyễn Huệ** là **cùng một người**.\n\nTên chính: **Nguyễn Huệ**\n\n---\n\nDưới đây là các sự kiện liên quan:\n\nNăm 1789: Quang Trung đại phá quân Thanh.'
     };
     const result = formatHistoryResponse(data);
     expect(result).toContain('cùng một người');
-    expect(result).toContain('### Năm 1789');
     expect(result).toContain('Quang Trung đại phá quân Thanh');
   });
 
