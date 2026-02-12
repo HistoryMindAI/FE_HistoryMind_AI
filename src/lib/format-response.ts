@@ -123,6 +123,13 @@ export function formatHistoryResponse(data: unknown): string {
         });
 
         let markdown = '';
+
+        // Prepend answer text before events when both exist
+        // This preserves context like same-person detection, relationship explanations, etc.
+        if (typeof obj.answer === 'string' && obj.answer.trim()) {
+          markdown += `${obj.answer.trim()}\n\n`;
+        }
+
         const sortedYears = Object.keys(groups).sort((a, b) => {
           if (a === 'Khác') return 1;
           if (b === 'Khác') return -1;
