@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Crown, Swords, Landmark, Sparkles, Shield, Scroll, MapPin, BookMarked } from 'lucide-react';
+import { BookOpen, Crown, Swords, Landmark, Sparkles } from 'lucide-react';
 import { useThemeContext } from '@/contexts/ThemeContext';
 
 interface WelcomeScreenProps {
@@ -54,26 +54,6 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
       title: t.suggestions.daiViet.title,
       question: t.suggestions.daiViet.question,
     },
-    {
-      icon: MapPin,
-      title: t.suggestions.nhaLy.title,
-      question: t.suggestions.nhaLy.question,
-    },
-    {
-      icon: Shield,
-      title: t.suggestions.ngoQuyen.title,
-      question: t.suggestions.ngoQuyen.question,
-    },
-    {
-      icon: Scroll,
-      title: t.suggestions.leLoi.title,
-      question: t.suggestions.leLoi.question,
-    },
-    {
-      icon: BookMarked,
-      title: t.suggestions.tongHop.title,
-      question: t.suggestions.tongHop.question,
-    },
   ];
 
   return (
@@ -115,7 +95,7 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
 
       {/* Suggestion Cards - refined design */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-4xl w-full relative z-10"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full relative z-10"
         variants={containerVariants}
       >
         {suggestions.map((suggestion, index) => (

@@ -58,22 +58,6 @@ export const translations = {
         title: 'Đại Việt',
         question: 'Đại Việt đã được thành lập như thế nào và phát triển qua các thời kỳ ra sao?',
       },
-      nhaLy: {
-        title: 'Nhà Lý',
-        question: 'Lý Thái Tổ dời đô về Thăng Long có ý nghĩa gì đối với lịch sử Việt Nam?',
-      },
-      ngoQuyen: {
-        title: 'Ngô Quyền',
-        question: 'Ngô Quyền đánh thắng quân Nam Hán trên sông Bạch Đằng như thế nào?',
-      },
-      leLoi: {
-        title: 'Lê Lợi',
-        question: 'Khởi nghĩa Lam Sơn của Lê Lợi diễn ra như thế nào?',
-      },
-      tongHop: {
-        title: 'Tổng hợp',
-        question: 'Những triều đại và anh hùng nào nổi bật nhất trong lịch sử Việt Nam?',
-      },
     },
     // Header
     header: {
@@ -147,22 +131,6 @@ export const translations = {
         title: 'Đại Việt',
         question: 'How was Đại Việt established and how did it develop through the ages?',
       },
-      nhaLy: {
-        title: 'Lý Dynasty',
-        question: 'What was the significance of Lý Thái Tổ moving the capital to Thăng Long?',
-      },
-      ngoQuyen: {
-        title: 'Ngô Quyền',
-        question: 'How did Ngô Quyền defeat the Southern Han army on the Bạch Đằng River?',
-      },
-      leLoi: {
-        title: 'Lê Lợi',
-        question: 'How did the Lam Sơn uprising led by Lê Lợi unfold?',
-      },
-      tongHop: {
-        title: 'Overview',
-        question: 'Which dynasties and heroes were most prominent in Vietnamese history?',
-      },
     },
     // Header
     header: {
@@ -226,10 +194,6 @@ export type Translations = {
     trungSisters: { title: string; question: string };
     vanMieu: { title: string; question: string };
     daiViet: { title: string; question: string };
-    nhaLy: { title: string; question: string };
-    ngoQuyen: { title: string; question: string };
-    leLoi: { title: string; question: string };
-    tongHop: { title: string; question: string };
   };
   header: {
     title: string;
