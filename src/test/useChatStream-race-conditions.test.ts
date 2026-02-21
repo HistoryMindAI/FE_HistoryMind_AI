@@ -55,7 +55,7 @@ describe('Bug #6: Concurrent message updates - race conditions', () => {
       resolveFunc = resolve;
     });
 
-    vi.mocked(fetch).mockReturnValue(promise as any);
+    vi.mocked(fetch).mockReturnValue(promise as Promise<Response>);
 
     const { result } = renderHook(() => useChatStream());
 
