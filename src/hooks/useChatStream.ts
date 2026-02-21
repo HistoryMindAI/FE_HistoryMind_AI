@@ -116,6 +116,25 @@ export function useChatStream() {
 
         // Assistant message already added (with empty content showing thinking dots)
 
+        // Bug #6 Fix: Batch content updates to reduce race conditions
+        let updateIntervalId: NodeJS.Timeout | null = null;
+        let pendingContent = '';
+
+        const updateMessage = () => {
+          if (pendingContent !== assistantContent) {
+            setMessages(prev =>
+              prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, content: pendingContent }
+                  : m
+              )
+            );
+          }
+        };
+
+        // Update UI every 100ms instead of every chunk
+        updateIntervalId = setInterval(updateMessage, 100);
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -139,19 +158,19 @@ export function useChatStream() {
               const content = parsed.choices?.[0]?.delta?.content as string | undefined;
               if (content) {
                 assistantContent += content;
-                setMessages(prev =>
-                  prev.map(m =>
-                    m.id === assistantId
-                      ? { ...m, content: assistantContent }
-                      : m
-                  )
-                );
+                pendingContent = assistantContent;  // Bug #6 Fix: Update pending content instead of immediate state
               }
-            } catch {
-              textBuffer = line + '\n' + textBuffer;
-              break;
+            } catch (parseError) {
+              // Bug #7 Fix: Log error but continue processing instead of breaking
+              console.warn('Failed to parse JSON chunk, skipping:', jsonStr, parseError);
+              continue;  // Skip this line and continue with next
             }
           }
+        }
+
+        // Bug #6 Fix: Clear interval and do final update
+        if (updateIntervalId) {
+          clearInterval(updateIntervalId);
         }
 
         // Final flush
