@@ -104,6 +104,11 @@ export function formatHistoryResponse(data: unknown): string {
 
         const normalizedKey = getNormalizedKey(cleanedContent);
 
+        // Bug #3 Fix: Validate normalizedKey is not empty before using
+        if (!normalizedKey || normalizedKey.trim().length === 0) {
+          return; // Skip events with empty normalized keys
+        }
+
         // Use a combination of year and normalized prefix for deduplication
         // This helps if the same event is reported with slightly different wording
         const dedupeKey = `${year}_${normalizedKey.slice(0, 50)}`;
