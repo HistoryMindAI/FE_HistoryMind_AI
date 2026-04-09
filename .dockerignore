@@ -4,4 +4,3 @@ dist
 .gitignore
 .env
 test-results
-supabase/.temp
